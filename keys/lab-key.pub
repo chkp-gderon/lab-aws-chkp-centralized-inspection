@@ -1,0 +1,3 @@
+# Paste your SSH public key here, for example:
+# ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ... user@host
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAncITJLp1G2FhrttPb4AFBmMAwyRc/kkHdtpprHOhGb

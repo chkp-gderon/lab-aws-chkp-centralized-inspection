@@ -1,0 +1,56 @@
+aws_region     = "eu-west-1"
+aws_profile    = "your-aws-cli-profile"
+project_name   = "aws-lz"
+environment    = "lab"
+lab_name       = "aws-lz-chkp-centralized-inspection"
+
+inspection_vpc_cidr = "10.100.0.0/16"
+app1_vpc_cidr       = "10.110.0.0/16"
+app2_vpc_cidr       = "10.120.0.0/16"
+
+# Fill with your own admin source CIDRs.
+bastion_allowed_cidr               = "x.x.x.x/32"
+checkpoint_admin_cidr              = "x.x.x.x/32"
+checkpoint_gateways_addresses_cidr = "10.100.0.0/16"
+
+# Paste your public key into keys/lab-key.pub or point to another file.
+public_key_path = "./keys/lab-key.pub"
+key_pair_name   = "aws-lz-chkp-lab-key"
+
+windows_instance_type = "t3.large"
+linux_instance_type   = "t3.small"
+
+checkpoint_gateway_instance_type    = "c6in.xlarge"
+checkpoint_management_instance_type = "m5.xlarge"
+checkpoint_gateway_version          = "R82-PAYG-NGTP"
+checkpoint_management_version       = "R81.20-PAYG"
+
+# Required. Change this value for your environment.
+checkpoint_gateway_sic_key = "replace-with-at-least-8-chars"
+
+# PASSWORD MANAGEMENT
+# Option 1 (RECOMMENDED): Enable auto-generation of random passwords
+#   Set generate_random_passwords = true below (requires openssl installed locally)
+#   Terraform will auto-generate 32-char random passwords and convert them to SHA-512 hashes.
+#   View generated passwords in terraform outputs: 'terraform output generated_passwords'
+#   Leave the password hash variables empty ("") below.
+#
+# Option 2: Manual password hash (provide hashes below)
+#   Set generate_random_passwords = false
+#   Generate hashes manually: openssl passwd -6 YOUR_PASSWORD
+#   Paste the hashes into the variables below.
+#
+# WARNING: Modifying password hashes AFTER deployment triggers cascading infrastructure updates:
+#   - Management instance user_data changes (brief downtime)
+#   - Transit Gateway routes/attachments recreated (disruptive)
+#   - Multiple resource destroy/create cycles
+# BEST PRACTICE: Generate passwords at deployment time. For rotation, change passwords
+#                post-deploy via the Check Point management console to avoid infrastructure churn.
+
+generate_random_passwords = false
+
+# Password hashes (leave empty if using auto-generation above)
+checkpoint_gateway_password_hash                     = ""
+checkpoint_gateway_maintenance_mode_password_hash    = ""
+checkpoint_management_password_hash                  = ""
+checkpoint_management_maintenance_mode_password_hash = ""
