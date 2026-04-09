@@ -1,5 +1,5 @@
 aws_region     = "eu-west-1"
-aws_profile    = "your-aws-cli-profile"
+aws_profile    = "terraform"
 project_name   = "aws-lz"
 environment    = "lab"
 lab_name       = "aws-lz-chkp-centralized-inspection"

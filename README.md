@@ -12,9 +12,9 @@ This environment deploys a 100% Terraform-based AWS lab for testing Check Point 
 
 ## Architecture Diagram
 
-![AWS Check Point Centralized Inspection Architecture](./aws-lz-chkp-centralized-inspection.drawio.png)
+![AWS Check Point Centralized Inspection Architecture](./drawings/aws-lz-chkp-centralized-inspection.drawio.png)
 
-This is a drawio diagram. To edit it, open [aws-lz-chkp-centralized-inspection.drawio](./aws-lz-chkp-centralized-inspection.drawio) with [diagrams.net](https://app.diagrams.net/) (File -> Open From -> GitHub).
+To edit this diagram, open [drawings/aws-lz-chkp-centralized-inspection.drawio.png](./drawings/aws-lz-chkp-centralized-inspection.drawio.png) with [diagrams.net](https://app.diagrams.net/) (File -> Open From -> GitHub).
 
 ## Official Check Point Module
 
@@ -23,6 +23,32 @@ This environment uses:
 - `CheckPointSW/cloudguard-network-security/aws//modules/tgw_gwlb_master` version `1.0.10`
 
 ## Quick Start
+
+### Dev Container / Codespaces
+
+This repository includes a dev container in [.devcontainer/devcontainer.json](.devcontainer/devcontainer.json) with both Terraform and AWS CLI preinstalled.
+
+If you open the repo in GitHub Codespaces and want background on the model, see [What are GitHub Codespaces?](https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces).
+
+The dev container installs the tools, but it does not create your AWS login profiles automatically. If you want Terraform to use a dedicated AWS CLI profile named `terraform`, the minimum bootstrap below assumes you already have a working `default` AWS CLI login profile. If you do not, create one first with `aws configure sso --profile default` or your organization's standard AWS CLI login flow.
+
+Minimum bootstrap commands:
+
+```bash
+LOGIN_SESSION=$(aws configure get login_session --profile default)
+REGION=$(aws configure get region --profile default)
+
+aws configure set login_session "$LOGIN_SESSION" --profile terraform-login
+aws configure set region "${REGION:-eu-west-1}" --profile terraform-login
+
+aws configure set credential_process "aws configure export-credentials --profile terraform-login" --profile terraform
+aws configure set region "${REGION:-eu-west-1}" --profile terraform
+
+aws login --profile terraform-login --remote
+aws sts get-caller-identity --profile terraform
+```
+
+After that, keep `aws_profile = "terraform"` in `terraform.tfvars` and use Terraform normally.
 
 1. Copy and edit tfvars:
 
