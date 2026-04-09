@@ -147,10 +147,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "inspection" {
   }
 
   depends_on = [module.checkpoint_inspection]
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "app1" {
@@ -207,6 +203,10 @@ resource "aws_ec2_transit_gateway_route_table_association" "inspection_to_inspec
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection.id
   replace_existing_association   = true
+
+  lifecycle {
+    replace_triggered_by = [aws_ec2_transit_gateway_vpc_attachment.inspection]
+  }
 }
 
 # Spoke table sends inter-VPC and north/south traffic to inspection attachment.

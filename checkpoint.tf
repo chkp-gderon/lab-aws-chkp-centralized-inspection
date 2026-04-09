@@ -97,11 +97,3 @@ data "aws_subnets" "inspection_tgw" {
 
   depends_on = [module.checkpoint_inspection]
 }
-
-resource "aws_ec2_tag" "inspection_vpc_name" {
-  resource_id = data.aws_vpc.inspection.id
-  key         = "Name"
-  value       = local.inspection_name
-
-  depends_on = [module.checkpoint_inspection]
-}
