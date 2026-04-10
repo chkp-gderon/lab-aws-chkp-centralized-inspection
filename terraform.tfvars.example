@@ -17,7 +17,6 @@ checkpoint_gateways_addresses_cidr = "10.100.0.0/16"
 public_key_path = "./keys/lab-key.pub"
 key_pair_name   = "aws-lz-chkp-lab-key"
 
-windows_instance_type = "t3.large"
 linux_instance_type   = "t3.small"
 
 checkpoint_gateway_instance_type    = "c6in.large"

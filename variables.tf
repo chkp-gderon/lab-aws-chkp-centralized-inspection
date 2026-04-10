@@ -97,12 +97,6 @@ variable "key_pair_name" {
   default     = "aws-lz-chkp-lab-key"
 }
 
-variable "windows_instance_type" {
-  description = "Instance type for Windows bastion"
-  type        = string
-  default     = "t3.large"
-}
-
 variable "linux_instance_type" {
   description = "Instance type for Linux test instances"
   type        = string
