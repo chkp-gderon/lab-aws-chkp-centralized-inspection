@@ -29,9 +29,21 @@ resource "random_password" "management_maintenance_password" {
   special = true
 }
 
+locals {
+  password_hash_dir = "${path.module}/.generated"
+
+  password_hashes_ready = alltrue([
+    fileexists("${path.module}/.generated/gateway_hash.txt"),
+    fileexists("${path.module}/.generated/gateway_maint_hash.txt"),
+    fileexists("${path.module}/.generated/management_hash.txt"),
+    fileexists("${path.module}/.generated/management_maint_hash.txt")
+  ])
+}
+
 # Convert random passwords to SHA-512 hashes using openssl
 resource "null_resource" "generate_password_hashes" {
-  count = var.generate_random_passwords ? 1 : 0
+  # Bootstrap behavior: generate hash files only when they do not already exist.
+  count = var.generate_random_passwords && !local.password_hashes_ready ? 1 : 0
 
   triggers = {
     gateway_password                = random_password.gateway_password.result
@@ -42,10 +54,11 @@ resource "null_resource" "generate_password_hashes" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      echo '${random_password.gateway_password.result}' | openssl passwd -6 -stdin > /tmp/gateway_hash.txt
-      echo '${random_password.gateway_maintenance_password.result}' | openssl passwd -6 -stdin > /tmp/gateway_maint_hash.txt
-      echo '${random_password.management_password.result}' | openssl passwd -6 -stdin > /tmp/management_hash.txt
-      echo '${random_password.management_maintenance_password.result}' | openssl passwd -6 -stdin > /tmp/management_maint_hash.txt
+      mkdir -p '${local.password_hash_dir}'
+      echo '${random_password.gateway_password.result}' | openssl passwd -6 -stdin > '${local.password_hash_dir}/gateway_hash.txt'
+      echo '${random_password.gateway_maintenance_password.result}' | openssl passwd -6 -stdin > '${local.password_hash_dir}/gateway_maint_hash.txt'
+      echo '${random_password.management_password.result}' | openssl passwd -6 -stdin > '${local.password_hash_dir}/management_hash.txt'
+      echo '${random_password.management_maintenance_password.result}' | openssl passwd -6 -stdin > '${local.password_hash_dir}/management_maint_hash.txt'
     EOT
   }
 }
@@ -53,25 +66,25 @@ resource "null_resource" "generate_password_hashes" {
 # Read generated hashes
 data "local_file" "gateway_password_hash" {
   count      = var.generate_random_passwords ? 1 : 0
-  filename   = "/tmp/gateway_hash.txt"
+  filename   = "${local.password_hash_dir}/gateway_hash.txt"
   depends_on = [null_resource.generate_password_hashes]
 }
 
 data "local_file" "gateway_maintenance_password_hash" {
   count      = var.generate_random_passwords ? 1 : 0
-  filename   = "/tmp/gateway_maint_hash.txt"
+  filename   = "${local.password_hash_dir}/gateway_maint_hash.txt"
   depends_on = [null_resource.generate_password_hashes]
 }
 
 data "local_file" "management_password_hash" {
   count      = var.generate_random_passwords ? 1 : 0
-  filename   = "/tmp/management_hash.txt"
+  filename   = "${local.password_hash_dir}/management_hash.txt"
   depends_on = [null_resource.generate_password_hashes]
 }
 
 data "local_file" "management_maintenance_password_hash" {
   count      = var.generate_random_passwords ? 1 : 0
-  filename   = "/tmp/management_maint_hash.txt"
+  filename   = "${local.password_hash_dir}/management_maint_hash.txt"
   depends_on = [null_resource.generate_password_hashes]
 }
 
