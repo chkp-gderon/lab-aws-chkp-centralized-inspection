@@ -1,8 +1,8 @@
 # AWS Check Point Centralized Inspection Lab
 
-This environment deploys a 100% Terraform-based AWS lab for testing Check Point CloudGuard inspection patterns:
+This environment deploys a 100% Terraform-based AWS lab for testing Check Point Cloud Firewall inspection patterns:
 
-- Inspection VPC with Check Point CloudGuard GWLB stack in 2 AZs (official module).
+- Inspection VPC with Check Point Cloud Firewall GWLB stack in 2 AZs (official module).
 - 2 client VPCs (App1 and App2) in a single primary AZ.
 - Central TGW connecting all 3 VPCs.
 - 3 EC2 instances:
