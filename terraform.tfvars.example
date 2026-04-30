@@ -1,8 +1,8 @@
 aws_region     = "eu-west-1"
 aws_profile    = "terraform"
-project_name   = "aws-lz"
+project_name   = "aws-chkp-centralized-inspection"
 environment    = "lab"
-lab_name       = "aws-lz-chkp-centralized-inspection"
+lab_name       = "lab-aws-chkp-centralized-inspection"
 
 inspection_vpc_cidr = "10.100.0.0/16"
 app1_vpc_cidr       = "10.110.0.0/16"
