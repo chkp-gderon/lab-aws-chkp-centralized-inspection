@@ -114,13 +114,13 @@ cp terraform.tfvars.example terraform.tfvars
 
 1. Paste your public key into `keys/lab-key.pub` (or change `public_key_path`).
 
-1. Set required values in `terraform.tfvars`:
+2. Set required values in `terraform.tfvars`:
 
 - `bastion_allowed_cidr`
 - `checkpoint_admin_cidr`
 - `checkpoint_gateway_sic_key`
 
-1. Set AWS profile in `terraform.tfvars`:
+3. Set AWS profile in `terraform.tfvars`:
 
 - `aws_profile = "your-profile-name"`
 
@@ -133,7 +133,7 @@ terraform init
 terraform validate
 ```
 
-1. Deploy:
+5. Deploy:
 
 ```bash
 terraform plan -out=tfplan
